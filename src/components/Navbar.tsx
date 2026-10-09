@@ -38,12 +38,12 @@ export default function Navbar() {
             Camisetas
           </Link>
 
-          <Link
+          {/* <Link
             href="/nosotros"
             className="text-sm font-medium text-black transition hover:text-gray-500"
           >
             Nosotros
-          </Link>
+          </Link> */}
 
           <Link
             href="/carrito"
@@ -128,13 +128,13 @@ export default function Navbar() {
               Camisetas
             </Link>
 
-            <Link
+            {/* <Link
               href="/nosotros"
               onClick={() => setMenuOpen(false)}
               className="py-4 text-sm font-bold uppercase tracking-wide text-black"
             >
               Nosotros
-            </Link>
+            </Link> */}
           </nav>
         </div>
       )}
