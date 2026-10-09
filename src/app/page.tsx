@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Hero from "@/components/Hero";
 import ProductSection from "@/components/ProductSection";
-
+export const dynamic = "force-dynamic";
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
