@@ -1,4 +1,7 @@
 import ProductCard from "@/components/ProductCard";
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 type Product = {
   id: number;
@@ -9,15 +12,19 @@ type Product = {
 };
 
 async function getProducts(): Promise<Product[]> {
-  const response = await fetch("/api/productos", {
-    cache: "no-store",
+  const products = await prisma.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
-  if (!response.ok) {
-    throw new Error("No se pudieron obtener los productos");
-  }
-
-  return response.json();
+  return products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    team: product.team,
+    price: product.price.toString(),
+    imageFront: product.imageFront,
+  }));
 }
 
 export default async function ProductSection() {
@@ -31,9 +38,7 @@ export default async function ProductSection() {
             Nuestra colección
           </p>
 
-          <h2 className="mt-2 text-4xl font-black text-black">
-            CAMISETAS
-          </h2>
+          <h2 className="mt-2 text-4xl font-black text-black">CAMISETAS</h2>
 
           <p className="mt-3 text-gray-600">
             Elige tu equipo y descubre las camisetas disponibles.
@@ -41,16 +46,11 @@ export default async function ProductSection() {
         </div>
 
         {products.length === 0 ? (
-          <p className="text-gray-500">
-            No hay camisetas disponibles.
-          </p>
+          <p className="text-gray-500">No hay camisetas disponibles.</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}

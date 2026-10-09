@@ -1,4 +1,9 @@
+
 import ProductVariantCard from "@/components/ProductVariantCard";
+import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 type Variant = {
   id: number;
@@ -20,16 +25,47 @@ type Product = {
   variants: Variant[];
 };
 
+// Obtener el producto directamente desde Neon con Prisma
 async function getProduct(id: string): Promise<Product> {
-  const response = await fetch(`/api/productos/${id}`, {
-    cache: "no-store",
-  });
+  const productId = Number(id);
 
-  if (!response.ok) {
-    throw new Error("Producto no encontrado");
+  // Validar el ID recibido en la URL
+  if (!Number.isSafeInteger(productId) || productId <= 0) {
+    notFound();
   }
 
-  return response.json();
+  const product = await prisma.product.findUnique({
+    where: {
+      id: productId,
+    },
+    include: {
+      variants: true,
+    },
+  });
+
+  // Mostrar la página 404 si no existe el producto
+  if (!product) {
+    notFound();
+  }
+
+  // Convertir Decimal de Prisma a string
+  return {
+    id: product.id,
+    name: product.name,
+    team: product.team,
+    description: product.description,
+    price: product.price.toString(),
+    imageFront: product.imageFront,
+    imageBack: product.imageBack,
+    variants: product.variants.map((variant) => ({
+      id: variant.id,
+      player: variant.player,
+      number: variant.number,
+      size: variant.size,
+      stock: variant.stock,
+      imageBack: variant.imageBack,
+    })),
+  };
 }
 
 export default async function ProductPage({
@@ -43,12 +79,12 @@ export default async function ProductPage({
 
   // Solo mostramos variantes que tengan stock
   const availableVariants = product.variants.filter(
-    (variant) => variant.stock > 0,
+    (variant) => variant.stock > 0
   );
 
   // Detectamos si esta camiseta tiene jugadores/dorsales
   const hasDorsalVariants = availableVariants.some((variant) =>
-    Boolean(variant.player || variant.number),
+    Boolean(variant.player || variant.number)
   );
 
   return (
@@ -174,7 +210,9 @@ export default async function ProductPage({
                     sm:text-xs
                   "
                 >
-                  {hasDorsalVariants ? "Disponible con dorsal" : "Disponible"}
+                  {hasDorsalVariants
+                    ? "Disponible con dorsal"
+                    : "Disponible"}
                 </span>
 
                 <span
@@ -243,7 +281,9 @@ export default async function ProductPage({
               md:text-4xl
             "
           >
-            {hasDorsalVariants ? "Elige tu jugador" : "Elige tu talla"}
+            {hasDorsalVariants
+              ? "Elige tu jugador"
+              : "Elige tu talla"}
           </h2>
 
           <p className="mt-2 text-sm text-gray-500 sm:text-base">
@@ -288,7 +328,9 @@ export default async function ProductPage({
                 productName={product.name}
                 team={product.team}
                 price={product.price}
-                productImage={product.imageBack || product.imageFront}
+                productImage={
+                  product.imageBack || product.imageFront
+                }
               />
             ))}
           </div>
