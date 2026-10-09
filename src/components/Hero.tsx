@@ -43,7 +43,7 @@ export default function Hero() {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/productos"
+              href="/camisetas"
               className="inline-flex items-center justify-center bg-white px-8 py-4 text-sm font-black uppercase tracking-wide text-black transition hover:bg-gray-200"
             >
               Ver camisetas

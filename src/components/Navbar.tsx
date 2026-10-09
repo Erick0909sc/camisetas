@@ -32,7 +32,7 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/productos"
+            href="/camisetas"
             className="text-sm font-medium text-black transition hover:text-gray-500"
           >
             Camisetas
@@ -121,7 +121,7 @@ export default function Navbar() {
             </Link>
 
             <Link
-              href="/productos"
+              href="/camisetas"
               onClick={() => setMenuOpen(false)}
               className="border-b border-gray-100 py-4 text-sm font-bold uppercase tracking-wide text-black"
             >
