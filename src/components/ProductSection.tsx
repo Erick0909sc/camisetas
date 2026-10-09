@@ -9,7 +9,7 @@ type Product = {
 };
 
 async function getProducts(): Promise<Product[]> {
-  const response = await fetch("http://localhost:3000/api/productos", {
+  const response = await fetch("/api/productos", {
     cache: "no-store",
   });
 
