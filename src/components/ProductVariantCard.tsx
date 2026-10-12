@@ -37,7 +37,7 @@ export default function ProductVariantCard({
   const image = variant.imageBack || productImage;
 
   const currentPrice = Number(price);
-  const oldPrice = 120;
+  const oldPrice = 150;
 
   const discount =
     oldPrice > currentPrice
